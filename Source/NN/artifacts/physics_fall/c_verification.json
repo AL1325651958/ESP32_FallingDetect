@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "self_test_error": 5.364418029785156e-07,
+  "feature_max_error": 6.556510925292969e-07,
+  "feature_cases": 6,
+  "vector_count": 15,
+  "vector_max_error": 5.364418029785156e-07,
+  "real_stream_windows": 603,
+  "real_stream_reused_frames": 593,
+  "real_stream_max_error": 1.0728836059570312e-06,
+  "empty_frames": 0,
+  "missing_behavior": "valid_zone_count < 4 => observation lost; existing alerts retained; never proof of vacancy",
+  "edge_tests": [
+    "24-frame warmup",
+    "ring wrap",
+    "counter rollover via uint32 timer",
+    "missing observation without vacancy claim",
+    "nonempty reacquisition"
+  ],
+  "note": "C parity does not establish field fall recall; see full_window_validation_falls in metrics.json."
+}

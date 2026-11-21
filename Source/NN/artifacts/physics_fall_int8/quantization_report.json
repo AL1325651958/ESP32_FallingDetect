@@ -1,0 +1,284 @@
+{
+  "method": "Symmetric per-output INT8 weights, dynamically quantized INT8 matrix inputs, int32 accumulation; float32 features/biases/LSTM state/nonlinearities.",
+  "window_frames": 24,
+  "source_weights_sha256": "4f0b228b070549a2aa6022606a115130eb6c9f263e4d35a236e1088cc380b746",
+  "review_sha256": "b07235feaa9ef0a871f4fd03c45b039fc3bff0d3a0aa8b0167c42343e7c1598e",
+  "parameter_storage": {
+    "float32_bytes": 50828,
+    "mixed_int8_bytes": 14408,
+    "reduction_percent": 71.65341937514755,
+    "compression_ratio": 3.52776235424764,
+    "note": "Parameter arrays including per-output scales and float biases; excludes code, self-test vectors, stack and queue."
+  },
+  "validation_float": {
+    "labels": [
+      "motion",
+      "fall",
+      "person_still"
+    ],
+    "confusion_matrix": [
+      [
+        36,
+        2,
+        0
+      ],
+      [
+        0,
+        13,
+        0
+      ],
+      [
+        0,
+        0,
+        8
+      ]
+    ],
+    "accuracy": 0.9661016949152542,
+    "recall": [
+      0.9473684210526315,
+      1.0,
+      1.0
+    ],
+    "precision": [
+      1.0,
+      0.8666666666666667,
+      1.0
+    ],
+    "f1": [
+      0.972972972972973,
+      0.9285714285714286,
+      1.0
+    ],
+    "macro_f1": 0.9671814671814672,
+    "balanced_accuracy": 0.9824561403508771,
+    "sequences": 59
+  },
+  "validation_int8": {
+    "labels": [
+      "motion",
+      "fall",
+      "person_still"
+    ],
+    "confusion_matrix": [
+      [
+        36,
+        2,
+        0
+      ],
+      [
+        0,
+        13,
+        0
+      ],
+      [
+        0,
+        0,
+        8
+      ]
+    ],
+    "accuracy": 0.9661016949152542,
+    "recall": [
+      0.9473684210526315,
+      1.0,
+      1.0
+    ],
+    "precision": [
+      1.0,
+      0.8666666666666667,
+      1.0
+    ],
+    "f1": [
+      0.972972972972973,
+      0.9285714285714286,
+      1.0
+    ],
+    "macro_f1": 0.9671814671814672,
+    "balanced_accuracy": 0.9824561403508771,
+    "sequences": 59
+  },
+  "validation_argmax_changes": 0,
+  "validation_max_probability_change": 0.010457873344421387,
+  "full_window_validation_int8": {
+    "labels": [
+      "motion",
+      "fall",
+      "person_still"
+    ],
+    "confusion_matrix": [
+      [
+        33,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        8
+      ]
+    ],
+    "accuracy": 0.9761904761904762,
+    "recall": [
+      0.9705882352941176,
+      null,
+      1.0
+    ],
+    "precision": [
+      1.0,
+      0.0,
+      1.0
+    ],
+    "f1": [
+      0.9850746268656716,
+      null,
+      1.0
+    ],
+    "macro_f1": 0.9925373134328358,
+    "balanced_accuracy": 0.9852941176470589,
+    "sequences": 42
+  },
+  "full_window_validation_fall_support": 0,
+  "dropout_float": {
+    "metrics": {
+      "labels": [
+        "motion",
+        "fall",
+        "person_still"
+      ],
+      "confusion_matrix": [
+        [
+          142,
+          10,
+          0
+        ],
+        [
+          0,
+          52,
+          0
+        ],
+        [
+          0,
+          0,
+          32
+        ]
+      ],
+      "accuracy": 0.9576271186440678,
+      "recall": [
+        0.9342105263157895,
+        1.0,
+        1.0
+      ],
+      "precision": [
+        1.0,
+        0.8387096774193549,
+        1.0
+      ],
+      "f1": [
+        0.9659863945578232,
+        0.9122807017543859,
+        1.0
+      ],
+      "macro_f1": 0.959422365437403,
+      "balanced_accuracy": 0.9780701754385964,
+      "sequences": 236
+    },
+    "nonfall_argmax_fall": 10,
+    "nonfall_fall_score_ge_08": 0
+  },
+  "dropout_int8": {
+    "metrics": {
+      "labels": [
+        "motion",
+        "fall",
+        "person_still"
+      ],
+      "confusion_matrix": [
+        [
+          143,
+          9,
+          0
+        ],
+        [
+          0,
+          52,
+          0
+        ],
+        [
+          0,
+          0,
+          32
+        ]
+      ],
+      "accuracy": 0.961864406779661,
+      "recall": [
+        0.9407894736842105,
+        1.0,
+        1.0
+      ],
+      "precision": [
+        1.0,
+        0.8524590163934426,
+        1.0
+      ],
+      "f1": [
+        0.9694915254237287,
+        0.9203539823008848,
+        1.0
+      ],
+      "macro_f1": 0.9632818359082046,
+      "balanced_accuracy": 0.9802631578947368,
+      "sequences": 236
+    },
+    "nonfall_argmax_fall": 9,
+    "nonfall_fall_score_ge_08": 0
+  },
+  "dropout_argmax_changes": 1,
+  "dropout_max_probability_change": 0.13303601741790771,
+  "c_self_test_max_error": 2.7939677238464355e-09,
+  "numpy_c_reference_vectors": 15,
+  "numpy_c_reference_max_error": 1.1920928955078125e-07,
+  "streaming": {
+    "new_inference_updates": 603,
+    "reused_frames": 593,
+    "max_probability_change": 0.013029366731643677,
+    "raw_class_changes": 0,
+    "stable_class_changes": 0,
+    "fall_threshold_band_changes": 0,
+    "limitation": "Replay of available source recordings, including training; not independent event validation."
+  },
+  "numpy_c_evaluation_sequences": 295,
+  "numpy_c_evaluation_max_error": 1.1920928955078125e-07,
+  "edge_checks": [
+    "24-frame warmup",
+    "ring wrap",
+    "uint32 timer wrap",
+    "gap reset",
+    "zero-valid override",
+    "too few valid zones",
+    "nonempty reacquisition"
+  ],
+  "checks": {
+    "self_test": true,
+    "numpy_c_reference": true,
+    "clean_accuracy_no_decrease": true,
+    "short_clip_fall_recall_no_decrease": true,
+    "synthetic_nonfall_high_scores_no_increase": true,
+    "synthetic_nonfall_argmax_fall_no_increase": true,
+    "replay_stable_decisions_unchanged": true,
+    "replay_fall_threshold_bands_unchanged": true,
+    "source_weights_unchanged": true,
+    "annotations_unchanged": true
+  },
+  "host_acceptance_passed": true,
+  "limitations": [
+    "Validation clips are small/correlated and were used in previous checkpoint selection.",
+    "No complete 24-frame fall validation window; full-event recall remains unmeasured.",
+    "Mixed INT8, not an end-to-end integer neural network."
+  ],
+  "host_evaluation_only": true,
+  "device_benchmark": "NN/artifacts/physics_fall_int8/device_benchmark.json (separate board measurement)"
+}

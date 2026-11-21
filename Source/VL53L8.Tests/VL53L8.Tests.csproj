@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../VL53L8/Services/HeatmapInterpolation.cs" Link="HeatmapInterpolation.cs" />
+    <Compile Include="../VL53L8/Services/ReplayTiming.cs" Link="ReplayTiming.cs" />
+    <Compile Include="../VL53L8/Services/RecordingService.cs" Link="RecordingService.cs" />
+  </ItemGroup>
+</Project>

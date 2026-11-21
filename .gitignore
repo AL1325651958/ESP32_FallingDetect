@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+build/
+bin/
+obj/
+.vs/
+*.user
+*.log
+*.dll
+*.pdb
+.env

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VL53L8.MainPage"
+             Title="监测" Shell.NavBarIsVisible="False">
+    <Grid RowDefinitions="*,Auto">
+    <ScrollView>
+        <VerticalStackLayout Padding="20,18,20,28" Spacing="16">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <VerticalStackLayout Spacing="2">
+                    <Label Text="VL53L8" FontSize="30" FontFamily="OpenSansSemibold" TextColor="#102A43" />
+                </VerticalStackLayout>
+                <Border Grid.Column="1" Padding="12,7" Background="#E8F5EE" StrokeThickness="0" StrokeShape="RoundRectangle 18">
+                    <HorizontalStackLayout Spacing="6">
+                        <BoxView x:Name="StatusDot" WidthRequest="9" HeightRequest="9" CornerRadius="5" Color="#45B97C" VerticalOptions="Center" />
+                        <Label x:Name="StatusLabel" Text="未连接" FontSize="15" TextColor="#287D52" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+            <Border Padding="16" Background="#F4F7FA" Stroke="#D9E2EC" StrokeThickness="1" StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="设备连接" FontSize="18" FontFamily="OpenSansSemibold" TextColor="#102A43" />
+                        </VerticalStackLayout>
+                        <Button x:Name="ScanButton" Grid.Column="1" Text="扫描设备" Clicked="OnScanClicked" Padding="14,8" />
+                    </Grid>
+                    <CollectionView x:Name="DeviceList" IsVisible="False" HeightRequest="92" SelectionMode="Single" SelectionChanged="OnDeviceSelected">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,3" Padding="12,8" Background="#FFFFFF" Stroke="#D9E2EC" StrokeShape="RoundRectangle 10">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding Name}" FontFamily="OpenSansSemibold" TextColor="#243B53" />
+                                        </VerticalStackLayout>
+                                        <Label Grid.Column="1" Text="连接 ›" TextColor="#3366CC" VerticalOptions="Center" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+            <Border Padding="16" Background="#FFF8E7" Stroke="#F4D06F" StrokeThickness="1" StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout Spacing="10">
+                    <Button x:Name="WifiSettingsButton" Text="Wi-Fi 设置" Clicked="OnWifiSettingsClicked" BackgroundColor="Transparent" TextColor="#7A4E00" HorizontalOptions="Fill" />
+                    <VerticalStackLayout x:Name="WifiSettingsPanel" IsVisible="False" Spacing="10">
+                    <Entry x:Name="WifiSsidEntry" Placeholder="Wi-Fi 名称" TextColor="#243B53" />
+                    <Entry x:Name="WifiPasswordEntry" Placeholder="Wi-Fi 密码" IsPassword="True" TextColor="#243B53" />
+                    <Button Text="保存配置" Clicked="OnProvisionClicked" BackgroundColor="#F0A34A" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+            <Border Padding="16" Background="#E8F5EE" Stroke="#C4DFD0" StrokeThickness="1" StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout Spacing="7">
+                    <Label Text="人员状态" FontSize="18" FontFamily="OpenSansSemibold" TextColor="#102A43" />
+                    <Label x:Name="FallLabel" Text="等待数据" FontSize="26" FontFamily="OpenSansSemibold" TextColor="#287D52" />
+                </VerticalStackLayout>
+            </Border>
+            <Border x:Name="GestureCard" IsVisible="False" Padding="16" Background="#E8F5EE" Stroke="#C4DFD0" StrokeThickness="1" StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout Spacing="7">
+                    <Label Text="剪刀石头布识别" FontSize="18" FontFamily="OpenSansSemibold" TextColor="#102A43" />
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                        <Label x:Name="GestureIconLabel" Text="?" FontSize="56" WidthRequest="72" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
+                            <Label x:Name="GestureLabel" Text="等待手势数据" FontSize="24" FontFamily="OpenSansSemibold" TextColor="#287D52" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+            <Border Padding="14" Background="#102A43" StrokeThickness="0" StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout Spacing="10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="距离热力图" FontSize="17" FontFamily="OpenSansSemibold" TextColor="White" />
+                        <Label x:Name="RangeLabel" Grid.Column="1" Text="—" FontSize="15" TextColor="#B3C7DB" />
+                    </Grid>
+                    <GraphicsView x:Name="HeatmapView" HeightRequest="300" />
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                        <Label Text="0" FontSize="15" TextColor="#F97316" />
+                        <BoxView Grid.Column="1" HeightRequest="7" VerticalOptions="Center">
+                            <BoxView.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#EF4444" Offset="0" /><GradientStop Color="#F97316" Offset="0.2" />
+                                    <GradientStop Color="#FACC15" Offset="0.4" /><GradientStop Color="#22C55E" Offset="0.6" />
+                                    <GradientStop Color="#06B6D4" Offset="0.8" /><GradientStop Color="#2563EB" Offset="1" />
+                                </LinearGradientBrush>
+                            </BoxView.Background>
+                        </BoxView>
+                        <Label Grid.Column="2" Text="3000 mm" FontSize="15" TextColor="#B3C7DB" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+            <Border Padding="16" Background="#F4F7FA" Stroke="#D9E2EC" StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout Spacing="10">
+                    <Button x:Name="CameraButton" Text="打开相机" Clicked="OnCameraClicked" BackgroundColor="#102A43" />
+                    <ContentView x:Name="CameraHost" IsVisible="False" HeightRequest="220" />
+                </VerticalStackLayout>
+            </Border>
+            <Border Padding="16" Background="#F4F7FA" Stroke="#D9E2EC" StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="数据保存" FontSize="18" TextColor="#102A43" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Button x:Name="SaveOnceButton" Text="保存一帧" Clicked="OnSaveOnceClicked" />
+                        <Button x:Name="RecordButton" Grid.Column="1" Text="开始录制" Clicked="OnRecordClicked" BackgroundColor="#287D52" />
+                    </Grid>
+                    <Label x:Name="RecordingLabel" IsVisible="False" FontSize="16" TextColor="#287D52" />
+                    <Button Text="查看记录" Clicked="OnDataClicked" BackgroundColor="#102A43" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+    <Label x:Name="FeedbackLabel" Grid.Row="1" IsVisible="False" Padding="20,12" FontSize="16" TextColor="#627D98" BackgroundColor="#F4F7FA" HorizontalTextAlignment="Center" />
+    </Grid>
+</ContentPage>

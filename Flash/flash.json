@@ -1,0 +1,30 @@
+{
+  "chip": "esp32s3",
+  "esp_idf": "6.1.0",
+  "model": "float32",
+  "flash_mode": "dio",
+  "flash_size": "2MB",
+  "flash_freq": "80m",
+  "segments": [
+    {
+      "offset": "0x0",
+      "file": "bootloader.bin",
+      "sha256": "e1c66de59972983e95dfee9c0297a45959f3a9f08be831073e7225e505d4a511"
+    },
+    {
+      "offset": "0x8000",
+      "file": "partition-table.bin",
+      "sha256": "5295e8c42d6fb5f95e4e8a185932c6191d27cfc5078322475347e40e71af815a"
+    },
+    {
+      "offset": "0x10000",
+      "file": "falling_detect.bin",
+      "sha256": "83756b71a353f37bd7dcbecaa2fc480f2249aa35bb07b62ea38a90b03cc21216"
+    }
+  ],
+  "merged": {
+    "file": "falling_detect-merged.bin",
+    "offset": "0x0",
+    "sha256": "6ee87d5d4967ed8ef2a7e2c687c45d602e4bb60d260022b3b1717ce2003207e8"
+  }
+}

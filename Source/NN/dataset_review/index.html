@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VL53L8 · 数据分类筛查</title>
+<style>
+:root{font:14px system-ui,"Microsoft YaHei",sans-serif;color:#18324a;background:#eef2f6;accent-color:#167b68}
+*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit;border:1px solid #b9c9d5;border-radius:6px;padding:7px;background:#fff;color:#18324a}
+button{cursor:pointer}button:hover{background:#edf6f3}button:disabled{opacity:.5;cursor:default}button.primary{background:#167b68;color:#fff;border-color:#167b68}
+header{padding:16px 22px;background:#18324a;color:#fff;display:flex;align-items:center;gap:12px;flex-wrap:wrap}h1{font-size:20px;margin:0}header p{margin:3px 0 0;color:#b8cbdc;font-size:12px}header input{flex:1;min-width:220px}
+#status{padding:8px 22px;min-height:35px;background:#e5efeb;overflow-wrap:anywhere}#status.error{background:#fff0eb;color:#a83122}
+main{display:grid;grid-template-columns:310px minmax(0,1fr);gap:14px;padding:14px;max-width:1800px;margin:auto;height:calc(100vh - 119px);min-height:650px}
+.panel{background:#fff;border:1px solid #d4dfe7;border-radius:10px;padding:15px;overflow:auto}.sidebar{display:flex;flex-direction:column}h2{font-size:18px;margin:0 0 8px}h3{font-size:15px;margin:0 0 10px}.muted{color:#617b8d;font-size:12px;line-height:1.65}.filters{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0}.filters input{grid-column:1/-1;width:100%}.filters select{width:100%;min-width:0}
+.list{overflow:auto;min-height:100px;flex:1;display:flex;flex-direction:column;gap:7px;padding:2px}.item{text-align:left;padding:10px;flex:none;border:1px solid #dbe3e9;overflow-wrap:anywhere}.item.active{border-color:#167b68;box-shadow:inset 3px 0 #167b68;background:#eef8f4}.item small{display:block;color:#617b8d;margin-top:5px;font-size:12px}.tag{display:inline-block;border-radius:4px;background:#fff0d9;color:#92551a;padding:1px 5px;margin:5px 4px 0 0;font-size:11px}.tag.duplicate{background:#ffe4e3;color:#a92d34}.tag.saved{background:#e2f3eb;color:#167b68}
+h2{overflow-wrap:anywhere}.source{word-break:break-all;margin-bottom:12px}.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.metric{background:#f1f5f8;padding:8px 10px;border-radius:6px;font-size:12px;color:#617b8d}.metric b{display:block;font-size:17px;color:#18324a;overflow-wrap:anywhere}
+.viewer{display:grid;grid-template-columns:minmax(290px,1.15fr) minmax(260px,1fr);gap:20px;margin-top:16px}.heatbox{max-width:520px;margin:auto}.heat{width:100%;display:block;aspect-ratio:1;border-radius:7px;background:#617b8d}.legend{height:9px;background:linear-gradient(to right,hsl(0,85%,47%),hsl(60,85%,47%),hsl(120,85%,47%),hsl(180,85%,47%),hsl(240,85%,47%));border-radius:4px;margin-top:7px}.legendlabels{display:flex;justify-content:space-between;font-size:12px;color:#617b8d;margin:4px 0 12px}
+.controls{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:8px 0}.seek{width:100%;padding:0}.compact{width:78px;padding:5px}.chart{display:block;width:100%;height:145px;border:1px solid #dbe3e9;border-radius:5px;cursor:crosshair;margin-top:10px}.labels{display:flex;gap:6px;flex-wrap:wrap}.labels .selected{background:#167b68;color:#fff;border-color:#167b68}.block{border-bottom:1px solid #e1e8ee;padding-bottom:14px;margin-bottom:14px}.range{background:#f1f7f4;border-left:3px solid #167b68;padding:8px;margin:6px 0;display:flex;align-items:center;gap:6px}.range span{flex:1}.range button{font-size:12px;padding:3px 6px}textarea{width:100%;min-height:66px;resize:vertical;margin:10px 0}.hidden{display:none!important}.reviewstate{font-size:12px;color:#92551a;margin-left:8px}.errors{color:#a83122;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}.instructions{background:#f1f5f8;border-radius:6px;padding:10px;font-size:12px;line-height:1.7;margin-top:12px}.empty{padding:40px 15px;color:#617b8d;text-align:center}
+@media(max-width:1050px){main{grid-template-columns:265px 1fr}.viewer{grid-template-columns:1fr}.heatbox{max-width:430px}}@media(max-width:700px){main{grid-template-columns:1fr;height:auto;min-height:0}.sidebar{max-height:460px}.meta{grid-template-columns:repeat(2,1fr)}header{padding:12px}header input{flex-basis:100%}}
+dialog{width:min(560px,calc(100% - 28px));max-height:85vh;overflow:auto;border:1px solid #b9c9d5;border-radius:10px;padding:22px;color:#18324a;background:#fff}dialog::backdrop{background:#18324a88}dialog h2{margin-bottom:10px}dialog input[type=file]{display:block;width:100%;margin:14px 0}dialog .controls{justify-content:flex-end;margin-bottom:0}.import-results{padding-left:22px;max-height:230px;overflow:auto;font-size:13px;line-height:1.6;overflow-wrap:anywhere}.import-results li{padding:5px 0}.import-results .failed{color:#a83122}.import-results .done{color:#167b68}#importProgress{font-size:13px;min-height:22px;white-space:pre-wrap;overflow-wrap:anywhere}button:focus-visible,input:focus-visible{outline:2px solid #167b68;outline-offset:3px}
+</style>
+</head>
+<body>
+<header>
+ <div><h1>VL53L8 数据分类筛查</h1><p>PC 数据集 · 8×8 测距回放 · 人工分类与片段标注</p></div>
+ <input id="root" aria-label="数据目录" placeholder="输入 PC 数据目录绝对路径">
+ <button id="import">导入数据</button><button id="scan">扫描数据</button><button id="export">导出已标注数据</button>
+</header>
+<div id="status" role="status">正在读取数据…</div>
+<dialog id="importDialog" aria-labelledby="importTitle" aria-describedby="importHelp">
+ <h2 id="importTitle">导入数据</h2>
+ <p id="importHelp" class="muted">从电脑选择 ZIP 或 CSV，支持一次选择多个文件。ZIP 中需包含 frames.csv；单文件最大 50 MB，CSV 总量最大 20 MB。</p>
+ <input id="importFiles" type="file" accept=".zip,.csv" multiple aria-label="选择 ZIP 或 CSV 文件">
+ <div class="muted">文件保存在当前数据目录的 imports 子目录中。同一文件重复上传会跳过，已有数据和标注不会被覆盖。新录制需人工分类。</div>
+ <ol id="importResults" class="import-results" aria-label="各文件导入结果"></ol>
+ <div id="importProgress" role="status" aria-live="polite">选择文件后开始导入。</div>
+ <div class="controls"><button id="importClose">关闭</button><button id="importStart" class="primary" disabled>开始导入</button></div>
+</dialog>
+<main>
+ <aside class="panel sidebar">
+  <h2>录制列表</h2><div id="summary" class="muted"></div>
+  <div class="filters">
+   <input id="search" placeholder="搜索录制名、文件名或路径" aria-label="搜索录制">
+   <select id="filterLabel" aria-label="类别筛选"><option value="">所有类别</option><option>运动</option><option>跌倒</option><option>有人静止</option><option>无人静止</option><option value="unclassified">未分类</option></select>
+   <select id="filterState" aria-label="审核状态"><option value="">全部审核状态</option><option value="pending">待审核</option><option value="saved">已保存标注</option><option value="excluded">已排除</option></select>
+   <select id="filterFlag" aria-label="异常筛选"><option value="">所有质量提示</option><option>重复录制</option><option>不足24连续帧</option><option>时间间隔异常</option><option>有效区域不足</option><option>原始内容已变更</option><option value="none">无质量提示</option></select>
+   <button id="resetFilters">重置筛选</button>
+  </div>
+  <div id="list" class="list"></div>
+  <details id="errorDetails" class="hidden"><summary id="errorSummary"></summary><div id="errors" class="errors"></div></details>
+ </aside>
+ <section class="panel">
+  <div id="empty" class="empty">选择左侧录制，回放并核对其类别。</div>
+  <div id="detail" class="hidden">
+   <h2 id="name"></h2><div id="source" class="source muted"></div>
+   <div id="meta" class="meta"></div>
+   <div class="viewer">
+    <div>
+     <div class="heatbox"><canvas id="heat" class="heat" width="480" height="480" aria-label="8乘8距离热力图"></canvas><div class="legend"></div><div class="legendlabels"><span>近 0 mm</span><span>远 <span id="scaleLabel">3000</span> mm</span><span>灰色：无效</span></div></div>
+     <div class="muted">水平侧视 · 下方对应地面 · 格内数字为距离 mm</div>
+     <input id="frame" class="seek" type="range" min="0" max="0" value="0" aria-label="当前帧">
+     <div id="pos" class="muted"></div>
+     <div class="controls"><button id="prev">上一帧</button><button id="play" class="primary">播放</button><button id="next">下一帧</button><label>跳帧 <input id="step" class="compact" type="number" min="1" max="1000" value="1"></label></div>
+     <div class="controls"><label>间隔 ms <input id="interval" class="compact" type="number" min="20" max="5000" value="100"></label><label>色阶上限 mm <input id="scale" class="compact" type="number" min="100" max="65534" value="3000"></label></div>
+     <canvas id="chart" class="chart" width="900" height="145" aria-label="变化量和纵向加权中心曲线"></canvas>
+     <div class="muted">点击曲线定位帧。绿：相邻帧有效区平均距离变化；红：近距离加权中心 y（0 顶部 → 7 地面）。曲线按帧排列，断流见帧间隔。</div>
+    </div>
+    <div>
+     <div class="block"><h3>整段分类</h3><div id="labels" class="labels"></div><p class="muted">目录标签仅作参考，选择类别并保存后才参与导出。片段标签覆盖对应帧的整段标签。</p></div>
+     <div class="block"><h3>片段分类</h3>
+      <div class="controls"><button id="markStart">当前帧 → 起点</button><button id="markEnd">当前帧 → 终点</button></div>
+      <div class="controls"><label>起 <input id="startFrame" class="compact" type="number" min="1" aria-label="片段起始帧"></label><label>止 <input id="endFrame" class="compact" type="number" min="1" aria-label="片段结束帧"></label></div>
+      <div class="controls"><select id="rangeLabel" aria-label="片段分类"><option>运动</option><option selected>跌倒</option><option>有人静止</option><option>无人静止</option></select><button id="addRange">添加片段</button></div>
+      <div id="ranges"></div><div class="muted">帧号从 1 开始，包含起止帧；片段之间不能重叠。</div>
+     </div>
+     <label><input id="excluded" type="checkbox"> 排除本录制，不导出</label>
+     <textarea id="note" placeholder="审核备注：重复来源、动作阶段、误触发原因…" aria-label="审核备注"></textarea>
+     <button id="save" class="primary">保存标注</button><span id="dirty" class="reviewstate"></span>
+     <div class="instructions">质量提示用于筛查，不自动决定类别。24 帧约对应 2.4 秒（10 Hz），连续帧条件沿用训练设置：至少 4 个有效区、相邻间隔 40–175 ms。无有效测距不等于无人，需结合场景判断。播放采用设置的固定间隔。</div>
+    </div>
+   </div>
+  </div>
+ </section>
+</main>
+<script>
+'use strict';
+const token = '__SESSION_TOKEN__';
+const labels = ['运动','跌倒','有人静止','无人静止'];
+const $ = id => document.getElementById(id);
+let records = [], current = null, data = null, annotation = null;
+let dirty = false, timer = null, openVersion = 0, busy = false;
+const blank = () => ({label:null,ranges:[],excluded:false,note:''});
+const clone = x => JSON.parse(JSON.stringify(x));
+async function api(path, body) {
+ const options = {headers:{'X-Review-Token':token}};
+ if(body !== undefined){options.method='POST';options.headers['Content-Type']='application/json';options.body=JSON.stringify(body);}
+ const response = await fetch(path, options), result = await response.json();
+ if(!response.ok) throw Error(result.error || '请求失败');
+ return result;
+}
+function msg(text, error=false){$('status').textContent=text;$('status').classList.toggle('error',error);}
+function changed(){dirty=true;renderDirty();}
+function renderDirty(){$('dirty').textContent=dirty?'有未保存修改':(current?.annotation?'标注已保存':'待审核');}
+function stop(){clearTimeout(timer);timer=null;$('play').textContent='播放';}
+function canLeave(){return !dirty || confirm('当前标注尚未保存，是否放弃修改？');}
+function setBusy(value){busy=value;['import','scan','save','export'].forEach(id=>$(id).disabled=value);document.querySelectorAll('#detail input,#detail select,#detail button,#detail textarea').forEach(el=>el.disabled=value);}
+function applyListing(result){
+ records=result.records;$('root').value=result.root;
+ $('errors').textContent=result.errors.join('\n');
+ $('errorSummary').textContent=`读取失败 ${result.errors.length} 项（点击查看）`;
+ $('errorDetails').classList.toggle('hidden',!result.errors.length);
+ renderList();
+}
+function effectiveLabel(record){return record.annotation?.label || record.original_label || '';}
+function tag(text, kind='') {const span=document.createElement('span');span.className='tag '+kind;span.textContent=text;return span;}
+function renderList(){
+ const query=$('search').value.trim().toLowerCase(), label=$('filterLabel').value, state=$('filterState').value, flag=$('filterFlag').value;
+ const filtered=records.filter(r=>{
+  if(query && !`${r.name} ${r.source}`.toLowerCase().includes(query)) return false;
+  if(label && (label==='unclassified'?effectiveLabel(r)!=='':effectiveLabel(r)!==label)) return false;
+  if(state==='pending' && r.annotation || state==='saved' && !r.annotation || state==='excluded' && !r.annotation?.excluded) return false;
+  if(flag && (flag==='none'?r.flags.length>0:!r.flags.includes(flag))) return false;
+  return true;
+ });
+ const reviewed=records.filter(r=>r.annotation).length;
+ $('summary').textContent=`显示 ${filtered.length} / ${records.length} 段 · 已审核 ${reviewed} · 待审核 ${records.length-reviewed}`;
+ $('list').replaceChildren();
+ for(const r of filtered){
+  const button=document.createElement('button');button.className='item'+(current?.id===r.id?' active':'');button.dataset.id=r.id;
+  const name=document.createElement('b');name.textContent=r.name||r.archive;button.append(name);
+  const detail=document.createElement('small');detail.textContent=`${effectiveLabel(r)||'未分类'} · ${r.frames} 帧 · ${r.duration_s} s`;button.append(detail);
+  const origin=document.createElement('small');origin.textContent=r.archive;button.append(origin);
+  if(r.annotation)button.append(tag(r.annotation.excluded?'已排除':r.annotation.ranges.length?'已审核 · 含片段':'已审核','saved'));
+  for(const f of r.flags)button.append(tag(f,f==='重复录制'?'duplicate':''));
+  button.onclick=()=>openRecord(r.id);$('list').append(button);
+ }
+ if(!filtered.length){const el=document.createElement('div');el.className='empty';el.textContent='没有匹配的录制';$('list').append(el);}
+}
+async function scan(){
+ if(busy || !canLeave())return;
+ stop();setBusy(true);++openVersion;msg('正在扫描数据…');
+ try{
+  const result=await api('/api/scan',{root:$('root').value});
+  current=data=annotation=null;dirty=false;$('detail').classList.add('hidden');$('empty').classList.remove('hidden');
+  applyListing(result);msg(`扫描完成：${records.length} 段，${result.errors.length} 项读取失败。请选择录制。`);
+ }catch(error){msg(error.message,true);}finally{setBusy(false);}
+}
+function uploadFile(file, onProgress){
+ return new Promise((resolve,reject)=>{
+  const request=new XMLHttpRequest();
+  request.open('POST','/api/import?filename='+encodeURIComponent(file.name));
+  request.timeout=300000;
+  request.setRequestHeader('X-Review-Token',token);
+  request.setRequestHeader('Content-Type','application/octet-stream');
+  request.upload.onprogress=event=>{if(event.lengthComputable)onProgress(Math.round(event.loaded/event.total*100));};
+  request.onload=()=>{
+   let result;try{result=JSON.parse(request.responseText);}catch{reject(Error(request.status===413?'单个文件不能超过 50 MB':'服务器返回异常，请刷新后重试'));return;}
+   if(request.status<200||request.status>=300)reject(Error(result.error||'导入失败'));else resolve(result);
+  };
+  request.onerror=()=>reject(Error('网络连接中断，请重试；已上传成功的文件会自动跳过'));
+  request.ontimeout=()=>reject(Error('导入超时，请刷新录制列表后重试'));
+  request.send(file);
+ });
+}
+$('import').onclick=()=>{
+ if(busy)return;
+ if(dirty)return msg('请先保存当前标注，再导入数据。',true);
+ stop();$('importFiles').value='';$('importResults').replaceChildren();$('importProgress').textContent='选择文件后开始导入。';$('importStart').disabled=true;$('importDialog').showModal();
+};
+$('importClose').onclick=()=>{if(!busy)$('importDialog').close();};
+$('importDialog').addEventListener('cancel',event=>{if(busy)event.preventDefault();});
+$('importFiles').onchange=()=>{$('importStart').disabled=!$('importFiles').files.length;$('importResults').replaceChildren();$('importProgress').textContent=`已选择 ${$('importFiles').files.length} 个文件。`;};
+$('importStart').onclick=async()=>{
+ const files=Array.from($('importFiles').files);if(busy||!files.length)return;
+ setBusy(true);++openVersion;$('importFiles').disabled=$('importStart').disabled=$('importClose').disabled=true;
+ const results=files.map(file=>{const row=document.createElement('li');row.textContent=file.name+'：等待导入';return row;});$('importResults').replaceChildren(...results);
+ let imported=0,skipped=0,failed=0;
+ try{
+  for(const [index,file] of files.entries()){
+   const progress=text=>{$('importProgress').textContent=`${index+1} / ${files.length} · ${file.name} · ${text}`;};
+   try{
+    if(!/\.(zip|csv)$/i.test(file.name)||!file.size)throw Error('请选择非空 ZIP 或 CSV 文件');
+    if(file.size>50*1024*1024)throw Error('单个文件不能超过 50 MB');
+    results[index].textContent=file.name+'：上传中';progress('上传中…');
+    const result=await uploadFile(file,percent=>progress(percent===100?'正在校验和扫描…':`上传 ${percent}%`));
+    imported+=result.imported;skipped+=result.skipped;applyListing(result.listing);
+    results[index].textContent=`${file.name}：${result.imported?'已导入 '+result.imported+' 段':'文件已存在，跳过 '+result.skipped+' 段'}`;results[index].className='done';
+   }catch(error){failed++;results[index].textContent=file.name+'：'+error.message;results[index].className='failed';}
+  }
+  if(imported){
+   current=data=annotation=null;dirty=false;$('detail').classList.add('hidden');$('empty').classList.remove('hidden');
+   ['search','filterLabel','filterState','filterFlag'].forEach(id=>$(id).value='');renderList();
+  }
+  const summary=`导入完成：新增 ${imported} 段，重复跳过 ${skipped} 段，失败 ${failed} 个文件。`;
+  $('importProgress').textContent=summary;msg(summary,failed>0);
+ }finally{setBusy(false);$('importFiles').disabled=$('importStart').disabled=$('importClose').disabled=false;}
+};
+async function openRecord(id){
+ if(busy || current?.id===id || !canLeave())return;
+ stop();setBusy(true);const version=++openVersion;
+ try{
+  const result=await api('/api/record/'+id);
+  if(version!==openVersion)return;
+  const record=records.find(r=>r.id===id);if(!record)return;
+  current=record;data=result;annotation=clone(result.annotation||blank());dirty=false;
+  $('empty').classList.add('hidden');$('detail').classList.remove('hidden');
+  $('name').textContent=current.name||current.archive;$('source').textContent=current.source;
+  $('meta').replaceChildren();
+  const metrics=[['总帧数',current.frames],['时长 s',current.duration_s],['有效区域 %',current.valid_percent],['最长连续帧',current.longest],['平均变化 mm',current.mean_motion_mm],['中位间隔 ms',current.median_interval_ms??'—'],['原目录标签',current.original_label||'—'],['相同录制数',current.duplicates.length]];
+  for(const [title,value] of metrics){const box=document.createElement('div');box.className='metric';const b=document.createElement('b');b.textContent=value;box.append(b,document.createTextNode(title));$('meta').append(box);}
+  $('frame').max=data.raw.length-1;$('frame').value=0;
+  ['startFrame','endFrame'].forEach(id=>{$(id).value='';$(id).max=data.raw.length;});
+  $('excluded').checked=!!annotation.excluded;$('note').value=annotation.note||'';
+  renderLabels();renderRanges();renderDirty();renderList();draw(0);
+  msg(current.flags.length?'质量提示：'+current.flags.join('、'):'已打开录制，可播放并标注。');
+ }catch(error){if(version===openVersion)msg(error.message,true);}finally{setBusy(false);}
+}
+function renderLabels(){
+ $('labels').replaceChildren();
+ for(const label of [...labels,null]){
+  const button=document.createElement('button');button.textContent=label||'暂不分类';
+  button.classList.toggle('selected',annotation.label===label);
+  button.onclick=()=>{annotation.label=label;changed();renderLabels();};$('labels').append(button);
+ }
+}
+function renderRanges(){
+ $('ranges').replaceChildren();
+ annotation.ranges.forEach((range,index)=>{
+  const box=document.createElement('div');box.className='range';const text=document.createElement('span');text.textContent=`${range.start+1}–${range.end+1} 帧 · ${range.label}`;box.append(text);
+  const seek=document.createElement('button');seek.textContent='查看';seek.onclick=()=>{stop();draw(range.start);};box.append(seek);
+  const remove=document.createElement('button');remove.textContent='删除';remove.onclick=()=>{annotation.ranges.splice(index,1);changed();renderRanges();draw(+$('frame').value);};box.append(remove);$('ranges').append(box);
+ });
+}
+function draw(index){
+ if(!data)return;
+ const i=Math.max(0,Math.min(data.raw.length-1,Math.trunc(index)));$('frame').value=i;
+ const relative=(data.times[i]-data.times[0])/1000, dt=i?data.times[i]-data.times[i-1]:null;
+ $('pos').textContent=`第 ${i+1} / ${data.raw.length} 帧 · ${relative.toFixed(3)} s · 间隔 ${dt??'—'} ms · 有效 ${data.counts[i]}/64 · unix_ms ${data.times[i]}`;
+ const ctx=$('heat').getContext('2d'), scale=Math.max(100,+$('scale').value||3000);$('scaleLabel').textContent=scale;
+ ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='16px system-ui';
+ data.raw[i].forEach((v,index)=>{
+  const x=index%8*60,y=Math.floor(index/8)*60;
+  ctx.fillStyle=v<0?'#617584':`hsl(${Math.max(0,Math.min(1,v/scale))*240},85%,47%)`;ctx.fillRect(x,y,60,60);
+  ctx.strokeStyle='#ffffff55';ctx.strokeRect(x+.5,y+.5,59,59);
+  ctx.fillStyle=v>=scale*.12&&v<scale*.82?'#132c42':'white';ctx.fillText(v<0?'—':v,x+30,y+30);
+ });drawChart(i);
+}
+function drawChart(i){
+ const canvas=$('chart'),ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height,left=36,right=w-14,top=24,bottom=h-20;
+ ctx.clearRect(0,0,w,h);const n=data.raw.length, x=j=>left+j*(right-left)/Math.max(1,n-1);
+ for(const range of annotation.ranges){ctx.fillStyle='#167b6818';ctx.fillRect(x(range.start),top,Math.max(3,x(range.end)-x(range.start)),bottom-top);}
+ ctx.strokeStyle='#dbe3e9';ctx.beginPath();ctx.moveTo(left,top);ctx.lineTo(left,bottom);ctx.lineTo(right,bottom);ctx.stroke();
+ const max=Math.max(1,...data.energy);
+ function curve(values,color,maximum){ctx.strokeStyle=color;ctx.beginPath();let active=false;values.forEach((v,j)=>{if(v===null){active=false;return;}const y=bottom-(v/maximum)*(bottom-top);if(active)ctx.lineTo(x(j),y);else ctx.moveTo(x(j),y);active=true;});ctx.stroke();}
+ curve(data.energy,'#167b68',max);curve(data.cy,'#c44d43',7);
+ ctx.strokeStyle='#18324a';ctx.beginPath();ctx.moveTo(x(i),top);ctx.lineTo(x(i),bottom);ctx.stroke();
+ ctx.fillStyle='#167b68';ctx.font='12px system-ui';ctx.textAlign='left';ctx.fillText(`变化峰值 ${max.toFixed(0)} mm`,left,14);
+ ctx.fillStyle='#c44d43';ctx.fillText('加权中心 y: 0–7',260,14);ctx.fillStyle='#617b8d';ctx.fillText('1 帧',left,h-4);ctx.textAlign='right';ctx.fillText(`${n} 帧`,right,h-4);
+}
+function step(){return Math.max(1,Math.trunc(+$('step').value||1));}
+function tick(){
+ timer=setTimeout(()=>{const next=+$('frame').value+step();if(next>=data.raw.length){stop();return;}draw(next);tick();},Math.max(20,Math.min(5000,+$('interval').value||100)));
+}
+$('play').onclick=()=>{if(!data)return;if(timer){stop();return;}if(+$('frame').value>=data.raw.length-1)draw(0);$('play').textContent='暂停';tick();};
+$('frame').oninput=e=>draw(+e.target.value);
+$('prev').onclick=()=>{stop();draw(+$('frame').value-step());};$('next').onclick=()=>{stop();draw(+$('frame').value+step());};
+$('scale').oninput=()=>draw(+$('frame').value);
+$('chart').onclick=event=>{if(!data)return;stop();const rect=$('chart').getBoundingClientRect(),x=(event.clientX-rect.left)/rect.width*900;draw(Math.round((x-36)/(900-50)*(data.raw.length-1)));};
+$('markStart').onclick=()=>{$('startFrame').value=+$('frame').value+1;};$('markEnd').onclick=()=>{$('endFrame').value=+$('frame').value+1;};
+$('addRange').onclick=()=>{
+ if(!data)return;const start=+$('startFrame').value-1,end=+$('endFrame').value-1;
+ if(!Number.isInteger(start)||!Number.isInteger(end)||start<0||start>end||end>=data.raw.length)return msg('请设置有效起止帧（从 1 开始，起点不大于终点）。',true);
+ if(annotation.ranges.some(r=>start<=r.end&&end>=r.start))return msg('片段有重叠，请先删除原片段。',true);
+ annotation.ranges.push({start,end,label:$('rangeLabel').value});annotation.ranges.sort((a,b)=>a.start-b.start);changed();renderRanges();draw(+$('frame').value);msg('片段已添加，请保存标注。');
+};
+$('note').oninput=e=>{annotation.note=e.target.value;changed();};$('excluded').onchange=e=>{annotation.excluded=e.target.checked;changed();};
+$('save').onclick=async()=>{
+ if(busy||!current)return;stop();setBusy(true);
+ try{const result=await api('/api/save',{id:current.id,sha256:data.sha256,...annotation});annotation=clone(result);current.annotation=result;dirty=false;renderDirty();renderList();msg('标注已保存。原始数据未改写。');}
+ catch(error){msg(error.message,true);}finally{setBusy(false);}
+};
+$('export').onclick=async()=>{
+ if(busy)return;if(dirty)return msg('请先保存当前标注，再导出。',true);stop();setBusy(true);
+ try{const result=await api('/api/export',{});msg(`导出完成：${result.clips} 个片段，${result.frames} 帧。保存到 ${result.path}`);}
+ catch(error){msg(error.message,true);}finally{setBusy(false);}
+};
+$('scan').onclick=scan;
+['search','filterLabel','filterState','filterFlag'].forEach(id=>$(id).addEventListener(id==='search'?'input':'change',renderList));
+$('resetFilters').onclick=()=>{['search','filterLabel','filterState','filterFlag'].forEach(id=>$(id).value='');renderList();};
+window.addEventListener('beforeunload',event=>{if(dirty||$('importDialog').open&&busy){event.preventDefault();event.returnValue='';}});
+api('/api/records').then(result=>{applyListing(result);msg(`已加载 ${records.length} 段，选择录制开始筛查。`);}).catch(error=>msg(error.message,true));
+</script>
+</body>
+</html>

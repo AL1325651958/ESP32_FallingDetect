@@ -1,0 +1,12 @@
+{
+  "preprocessing": "relative_foreground",
+  "learning_rate": 0.0007,
+  "batch_size": 256,
+  "weight_decay": 0.001,
+  "original_weight": 3.0,
+  "dropout": 0.2,
+  "schedule": true,
+  "scheduler_patience": 20,
+  "early_stopping_patience": 80,
+  "seed": 42
+}

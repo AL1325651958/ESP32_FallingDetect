@@ -1,0 +1,986 @@
+{
+  "seed": 20261028,
+  "architecture": "local 8x8 spatial/temporal gradient MLP(192,16) + raw/mask spatial MLP(128,16) + 12 physical features -> LSTM(44,24) -> last/max pooling -> Linear(48,16) -> softmax(3)",
+  "labels": {
+    "motion": 0,
+    "fall": 1,
+    "person_still": 2,
+    "unoccupied": 3
+  },
+  "window_frames": 24,
+  "window_seconds": 2.4,
+  "parameters": 12707,
+  "feature_version": 2,
+  "sampling": "shared",
+  "sampled_full_windows_first_epoch": 6,
+  "sampled_sequences_first_epoch": 72,
+  "review_sha256": "b07235feaa9ef0a871f4fd03c45b039fc3bff0d3a0aa8b0167c42343e7c1598e",
+  "review_path": "NN/review/annotations.json",
+  "missing_zone_handling": [
+    "distance plus validity mask",
+    "masked spatial derivative stencils",
+    "common-support temporal center changes with overlap gating",
+    "accumulated common-support displacement",
+    "random and 1-3-frame stripe/block dropout augmentation"
+  ],
+  "mounting": "horizontal side-view; heatmap +Y is down",
+  "physics_constraints": [
+    "common-support vertical displacement",
+    "downward direction prior for fall class",
+    "auxiliary accumulated displacement head",
+    "no vertical image reflection augmentation"
+  ],
+  "validation": {
+    "labels": [
+      "motion",
+      "fall",
+      "person_still"
+    ],
+    "confusion_matrix": [
+      [
+        36,
+        2,
+        0
+      ],
+      [
+        0,
+        13,
+        0
+      ],
+      [
+        0,
+        0,
+        8
+      ]
+    ],
+    "accuracy": 0.9661016949152542,
+    "recall": [
+      0.9473684210526315,
+      1.0,
+      1.0
+    ],
+    "precision": [
+      1.0,
+      0.8666666666666667,
+      1.0
+    ],
+    "f1": [
+      0.972972972972973,
+      0.9285714285714286,
+      1.0
+    ],
+    "macro_f1": 0.9671814671814672,
+    "balanced_accuracy": 0.9824561403508771,
+    "sequences": 59
+  },
+  "class_coverage": {
+    "0": {
+      "train_sequences": 44,
+      "validation_sequences": 38,
+      "training_records": 1,
+      "validation_records": 1
+    },
+    "1": {
+      "train_sequences": 37,
+      "validation_sequences": 13,
+      "training_records": 32,
+      "validation_records": 13
+    },
+    "2": {
+      "train_sequences": 35,
+      "validation_sequences": 8,
+      "training_records": 7,
+      "validation_records": 1
+    }
+  },
+  "recordings": [
+    {
+      "label": 2,
+      "label_spans": [
+        [
+          0,
+          25,
+          2
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\有人静止\\有人静止1.zip",
+      "member": "20261026_223511_805_d0395b10fbe9437abc431e27df26777c/frames.csv",
+      "sha256": "69b636401a9b95f4141eb8377212a025cae415e93350b0c907dfe5fa4949ee10",
+      "frames": 25
+    },
+    {
+      "label": 2,
+      "label_spans": [
+        [
+          0,
+          57,
+          2
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\有人静止\\有人静止1.zip",
+      "member": "20261026_223519_354_4771e08305454b078fc746fa40c6367f/frames.csv",
+      "sha256": "a74bd3349569bea3642b72ce55fb2435f9fe44d92fadaceb19f296765bbd26b6",
+      "frames": 57
+    },
+    {
+      "label": 2,
+      "label_spans": [
+        [
+          0,
+          56,
+          2
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\有人静止\\有人静止1.zip",
+      "member": "20261026_223528_177_2a3dc50194774dde91a624dd683c8e26/frames.csv",
+      "sha256": "4070374eced0131a37aea03c2c5a8d4fe23fad7c88219b820f976974cfeb7e39",
+      "frames": 56
+    },
+    {
+      "label": 2,
+      "label_spans": [
+        [
+          0,
+          92,
+          2
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\有人静止\\有人静止1.zip",
+      "member": "20261026_223536_378_4b93f5c54c524ae88a38e8a4a82f997c/frames.csv",
+      "sha256": "374c2f05db5d8cce4fab8f6f782e57c96c82053605db0b99e26534f4cb48a888",
+      "frames": 92
+    },
+    {
+      "label": 2,
+      "label_spans": [
+        [
+          0,
+          76,
+          2
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\有人静止\\有人静止1.zip",
+      "member": "20261026_223547_407_dbacad7036c243169c398d35c1d8250e/frames.csv",
+      "sha256": "8152cab7fd69eec9ef5ed7e21a03ff94261ef3a553b12ced715050c147046d65",
+      "frames": 76
+    },
+    {
+      "label": 2,
+      "label_spans": [
+        [
+          0,
+          90,
+          2
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\有人静止\\有人静止1.zip",
+      "member": "20261026_223600_005_b7673091289a44199bfe269a337d9c62/frames.csv",
+      "sha256": "6c46aca18bb777cf11c2c1682b670b10ee766ec0e49526e234534bd82982c559",
+      "frames": 90
+    },
+    {
+      "label": 2,
+      "label_spans": [
+        [
+          0,
+          100,
+          2
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\有人静止\\有人静止1.zip",
+      "member": "20261026_223611_596_9e56b64caf1e4380a2c23d8cd0dec462/frames.csv",
+      "sha256": "6ff1fde4465bc6a26910c20c5f4ebc805960b24e7f0c15057f551b53e1232855",
+      "frames": 100
+    },
+    {
+      "label": 2,
+      "label_spans": [
+        [
+          0,
+          69,
+          2
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\有人静止\\有人静止1.zip",
+      "member": "20261026_223624_988_ff7b2b2f0fda47d48f8ae29d4a1703b9/frames.csv",
+      "sha256": "2120ed0aaeb278cea69e5575fcc6b3156a42e796e15f04fc03c1e1426b9e62ad",
+      "frames": 69
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          12,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204018_619_8632f674727a472cadd231444c10743c/frames.csv",
+      "sha256": "10ce4f3295540d3c42cd18f71b477c3940b8033d971b530223cab60e60b506de",
+      "frames": 12
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          16,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204024_008_9fc3f934587e444b8ec738abea1119e0/frames.csv",
+      "sha256": "331a8d7361334288e144818871b471153d3968ba8a41bf78739f9451fca19397",
+      "frames": 16
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          11,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204031_005_15aa559e12e74e059461795d0fe26bec/frames.csv",
+      "sha256": "82f7ac386581104ccbcb875c9e054973927d33d3f7c11e606a9f122677766380",
+      "frames": 11
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          12,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204036_092_7945eca76b5440e7a251ea763902000b/frames.csv",
+      "sha256": "c46c5b3a0da3c95691732220838f62bc174200d3463303bac94a180c554a443a",
+      "frames": 12
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          9,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204046_683_43259ee00fe547e28c3ada5dfd4513bd/frames.csv",
+      "sha256": "fb4204861cf6703253d237943ca41ff9a5031df983ab41729e856dee47dc22fd",
+      "frames": 9
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          19,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204101_501_145a0794a54341ca8559d4756200a6be/frames.csv",
+      "sha256": "478d50ab696a346ac3b81e07f7fa02a5c2ea90141c7286458394ee6a9c6ff0fb",
+      "frames": 19
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          11,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204106_753_7f248855f50f466681011b9936ce4a80/frames.csv",
+      "sha256": "25aafd815379a9e9e472e3bf5d4ae42050c3d5eca3d326cb4333059884c46ed8",
+      "frames": 11
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          13,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204150_041_2fd913d1a0ec49a3946ee342396e2d4e/frames.csv",
+      "sha256": "8e55360f59213fa31192b2a51114394d646b0f8cf491370dfc9182a52345680e",
+      "frames": 13
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          11,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204155_482_92623e7f04da4b29b3db427f87159894/frames.csv",
+      "sha256": "d921f6c7c3f44fcf675288ba3bea8e061043a0c6b5133189943a4ac6134e7e7f",
+      "frames": 11
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          8,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204201_442_02efa02dea794ab8aa0b335b3cabaf84/frames.csv",
+      "sha256": "71f05fd7457612df9e50d9e3e93b657638d5c3cdcdd2629467cda6555851dff1",
+      "frames": 8
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          20,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204204_192_c0c4850c982545938b2a0a084c907dec/frames.csv",
+      "sha256": "39967a11bc5c3cb7ed558bc5f322e1b23e43b0e33b30d18e43bd7722b1534877",
+      "frames": 20
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          14,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204210_104_2484beb0525f487d801388129a3c88e0/frames.csv",
+      "sha256": "34012039e381d117d61bf8281ba736d14e4b6a4812da94765b4b8d2df31d540e",
+      "frames": 14
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          14,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204215_216_da56872e8031432688ccecb63381e3e1/frames.csv",
+      "sha256": "ab03e8abf08a7989d7c883d3d0831a7c144dd7e726a674187f1693bdc1bfde66",
+      "frames": 14
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          14,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204219_563_615afd36462f424a989fab7fa5a7a635/frames.csv",
+      "sha256": "c1e2d97f3d7f486ee6bb313a0afc6b32dcafe7cec76d7f130e1eda759c5d1633",
+      "frames": 14
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          9,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204224_335_88dff8da77b04d9fa408f1e7b2c3c6ad/frames.csv",
+      "sha256": "8b9a0f2126e928bf7f72898c93c03e10bae0c65d6a589c155a9cc4755b7af0ac",
+      "frames": 9
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          11,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204227_944_e778db3097f6442fbcc41a460f7682cf/frames.csv",
+      "sha256": "3ebb05b4ca5656467fb0eb608949f5012962be547ec970bd7efebe9f64177883",
+      "frames": 11
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          10,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204230_988_52f9ae9818024c6b9872c7b89b146ba6/frames.csv",
+      "sha256": "d825d334eccbead71463cfbe199e4fe222b4ea182f36eeee47bd4ab06ef0b7cb",
+      "frames": 10
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          9,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204234_067_b59626cb26c44ef5a7bd674ddd4410dc/frames.csv",
+      "sha256": "e8545784419ba87eb68519c1099030d630bd93f339d1fc94ec1ed02c52bdc302",
+      "frames": 9
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          11,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204237_263_07cfba81cb8546a885f3ed394b8c1bd8/frames.csv",
+      "sha256": "9ea8e5adf730663daf6a91dcec64ef0a47fba82906836e941ffa9fbbb87fd54a",
+      "frames": 11
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          8,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204240_310_75e378423e0d4b7492cafc534dc6d6cb/frames.csv",
+      "sha256": "c930073486c2985b2c92063c4cf25f7d0e3f37856aaae5c2ac3af437ef8e6311",
+      "frames": 8
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          8,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204243_414_8cf2caa474ac4901a5a864b47a343540/frames.csv",
+      "sha256": "ad30d08628b8feed01f53dc5045acbb68ae565233589eb3466d1511c95f0d3b7",
+      "frames": 8
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          9,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204245_242_ea99b3e946514a5a99d15958d6da09a5/frames.csv",
+      "sha256": "f4221a258c3dd83bb82a8c69101eaf1d4388585bff2b769d58bb67e3eec20c91",
+      "frames": 9
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          10,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204247_005_7c2e5020f66546068df3c8e9e4064dcd/frames.csv",
+      "sha256": "76bb5b87adcd65bcaadb8d498dcc8c30c09e6f24cd2a09d73de84ac2d8f06675",
+      "frames": 10
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          9,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204249_111_eb9423604b2f4c71ac2d78a3203631b3/frames.csv",
+      "sha256": "847a49d56bc54046c9e080cfa79a859d41ec04cada1231cff297e78d8bacc4a7",
+      "frames": 9
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          8,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204251_434_8bc0c2bc878748adaf6cd69d2c979e10/frames.csv",
+      "sha256": "4d294e235d27e96f1e6e720f16723fb7559c0261b171e02c45bb5d171ac9ec45",
+      "frames": 8
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          12,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204254_585_808f4177fbfc4036a89ecd45fdef85aa/frames.csv",
+      "sha256": "7e8609bb91d28a34139be7e7b2ff306304c7aee23dc470864a712c40577ab027",
+      "frames": 12
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          12,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒1.zip",
+      "member": "20261026_204257_851_f7615d2ee7be4ab1b96a575af217a019/frames.csv",
+      "sha256": "99282ab9aea34ab548ebb524c98fe3e15e7616b588b38085a13263d6c7e5f27c",
+      "frames": 12
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          15,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211214_581_bbaed54cca504872b137338fa026e297/frames.csv",
+      "sha256": "b9dfff93cc271f00fd30f7be98387176c863178d01c328af125fd170e3fd6c3b",
+      "frames": 15
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          10,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211223_321_6e0d64a739f843b492145c96fa119cdd/frames.csv",
+      "sha256": "78fdac6d1f6711460f043be0f03ff0d25d36a90f33bda672b58c2862e020d327",
+      "frames": 10
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          10,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211255_986_65fe5c3be8a04b959a7c9c0fd1eb3e6f/frames.csv",
+      "sha256": "d7ff75e8581fff185923733469350b8fe63abe7316f34aa39692d404bc63a743",
+      "frames": 10
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          10,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211259_724_9536e7528f9b4b3d869092c7fff9eef6/frames.csv",
+      "sha256": "dac3630bea4431faad264984e36ea0799dc9bf0c0d40bfee30657d92676cbd08",
+      "frames": 10
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          12,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211304_256_d5a01dcde7cd478e86e211c5adacb90a/frames.csv",
+      "sha256": "154f26e50a2adf852208714a9cb3d1d6c1fcb5b381156097d4e8a20bbb67911c",
+      "frames": 12
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          9,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211324_213_f45281d7f87c48a690acfee363b79c93/frames.csv",
+      "sha256": "bdec5fa8aa58cc22c0923d18ae888d2c812a9853855a45f7618061a66b17f606",
+      "frames": 9
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          12,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211328_250_51aa4892ca2b44388d140680d03c071e/frames.csv",
+      "sha256": "87046cfeee4e8c6c52a7c343fbe541119b4b558b15181e00cd5e810933217ccc",
+      "frames": 12
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          7,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211332_310_f9de81f562ae4e1aa0fddefd3ba661bd/frames.csv",
+      "sha256": "fa02bed2a1c616d589d7e7762cf00b82ed34b2f813752d636049f0f9ba9a41d7",
+      "frames": 7
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          10,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211335_705_78fcab96d83c47c7b42e421e227add36/frames.csv",
+      "sha256": "e3419797772cf52c15c3c36f9ed336388d652ddf8c572f91b06986f940d2a68d",
+      "frames": 10
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          9,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211339_081_5d88e86d9ef542fc9ff7e3cf1fbbd696/frames.csv",
+      "sha256": "fb3bb956251a61799789c7c8be8fa8005ffd4a48e1d81dc3f0fe755658472372",
+      "frames": 9
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          10,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211346_226_759926c8d7814d5d94d6afaf1ff2de07/frames.csv",
+      "sha256": "9645715c142075fa056803e2b485c6cfbe77c849308d0b6931b758e44891e0f7",
+      "frames": 10
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          12,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211349_500_3a056c2d6bce4918a1ec8e2e1502a6f3/frames.csv",
+      "sha256": "25e17d96b07a6c6a756c5c6e14cdec98e689e547767e2ca807eb4285bf6c5902",
+      "frames": 12
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          7,
+          1
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\跌倒\\跌倒2.zip",
+      "member": "20261026_211352_879_4ae6d20fa6a44898bf883beabd77a1b8/frames.csv",
+      "sha256": "3ecf8c6018c2f7b02383a0c64c8c40066f14852a99f1927a7baed184ca2f096b",
+      "frames": 7
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          10,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒3.zip",
+      "member": "20261026_223721_526_1fc64b2ead6e4207a7e82847bd6505cb/frames.csv",
+      "sha256": "42b51e6865bb19f2388b66cb0f1d6ce0581a974d1977a2f38638012cce98297e",
+      "frames": 10
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          35,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒3.zip",
+      "member": "20261026_223729_934_a1af9ffcabf0442c86a1be553d1b75e3/frames.csv",
+      "sha256": "dbd54541fc7c30005c435a5b290ace77895fdfc869bd43f22457dffbe876c0e8",
+      "frames": 35
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          24,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒3.zip",
+      "member": "20261026_223742_405_f8e69fe1f62947a9b688ef1dab607065/frames.csv",
+      "sha256": "02d74751579eb99f3aebb92957da0992878b74d73db86965b67406869b80ddef",
+      "frames": 24
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          22,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒3.zip",
+      "member": "20261026_223751_237_e74dca015f0144768f73b2bb77862f47/frames.csv",
+      "sha256": "9a10cc001f259d23d1627e8ab6a2422109020140d64ec6a9e9ef93e2ed015f47",
+      "frames": 22
+    },
+    {
+      "label": 1,
+      "label_spans": [
+        [
+          0,
+          14,
+          1
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\跌倒\\跌倒3.zip",
+      "member": "20261026_223805_450_147912d673b54c3990a317315eac1171/frames.csv",
+      "sha256": "2a2c387c60dda47fe7fb1fad56bf10cc382d51ea860270db42ca1e559962a872",
+      "frames": 14
+    },
+    {
+      "label": 0,
+      "label_spans": [
+        [
+          0,
+          425,
+          0
+        ]
+      ],
+      "split": "validation",
+      "archive": "NN\\Data\\运动\\运动2.zip",
+      "member": "frames.csv",
+      "sha256": "8930359e24797aabfac26ea8af407b9006228175430ff7ed422f98f0a57b394d",
+      "frames": 425
+    },
+    {
+      "label": 0,
+      "label_spans": [
+        [
+          0,
+          545,
+          0
+        ]
+      ],
+      "split": "train",
+      "archive": "NN\\Data\\运动\\运动记录1.zip",
+      "member": "frames.csv",
+      "sha256": "b95acdcacc25f4e87f7b63c6805f2e155c5c2ec4f65e8aa1dac883615a432443",
+      "frames": 545
+    }
+  ],
+  "empty_sensor_hard_override": {
+    "valid_zone_count": 0,
+    "output": "unoccupied",
+    "cases": 4
+  },
+  "full_window_validation_falls": 0,
+  "limitations": [
+    "Eight still-person recordings; the longest recording is held out, with correlated windows.",
+    "Two motion recordings and three labelled fall acquisition batches.",
+    "Full-window fall validation contains 0 recordings/windows; clips remain correlated and do not establish independent event recall.",
+    "Recording-level labels do not mark exact fall onset; scores do not represent independent event accuracy or safety certification."
+  ],
+  "best_epoch": 62,
+  "torch_numpy_max_error": 1.7881393432617188e-07,
+  "full_window_validation": {
+    "labels": [
+      "motion",
+      "fall",
+      "person_still"
+    ],
+    "confusion_matrix": [
+      [
+        33,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        8
+      ]
+    ],
+    "accuracy": 0.9761904761904762,
+    "recall": [
+      0.9705882352941176,
+      null,
+      1.0
+    ],
+    "precision": [
+      1.0,
+      0.0,
+      1.0
+    ],
+    "f1": [
+      0.9850746268656716,
+      null,
+      1.0
+    ],
+    "macro_f1": 0.9925373134328358,
+    "balanced_accuracy": 0.9852941176470589,
+    "sequences": 42,
+    "class_counts": [
+      34,
+      0,
+      8
+    ],
+    "limitation": "No complete fall window in validation; fall recall is undefined (zero support)."
+  }
+}

@@ -1,0 +1,70 @@
+menu "FallingDetect application"
+
+config FALLINGDETECT_I2C_SDA_GPIO
+    int "VL53L8CX SDA GPIO"
+    range 0 48
+    default 2
+    help
+        ESP32-S3 side of the level-shifted I2C bus.
+
+config FALLINGDETECT_I2C_SCL_GPIO
+    int "VL53L8CX SCL GPIO"
+    range 0 48
+    default 1
+    help
+        ESP32-S3 side of the level-shifted I2C bus.
+
+config FALLINGDETECT_SENSOR_INT_GPIO
+    int "VL53L8CX INT GPIO"
+    range -1 48
+    default 20
+    help
+        Sensor interrupt input. The current bring-up uses polling, but this
+        pin is configured as a high-impedance input for future interrupt use.
+
+config FALLINGDETECT_SENSOR_RESET_GPIO
+    int "VL53L8CX reset GPIO (-1 disables host reset)"
+    range -1 48
+    default -1
+    help
+        Set this only when the reset/LPn signal is level-shifted correctly for
+        the sensor I/O domain. The default leaves the module power-up reset
+        sequence to the sensor board.
+
+config FALLINGDETECT_I2C_FREQUENCY_HZ
+    int "I2C clock frequency (Hz)"
+    range 10000 1000000
+    default 400000
+
+config FALLINGDETECT_RANGING_FREQUENCY_HZ
+    int "VL53L8CX ranging frequency (Hz)"
+    range 1 15
+    default 10
+    help
+        The 8x8 mode supports 1 to 15 Hz. The hardware plan starts at 10 Hz.
+
+config FALLINGDETECT_RPS_ENABLED
+    bool "Enable rock/paper/scissors neural network"
+    default n
+    help
+        Run the 8x8 ToF CNN on every frame and print gesture results.
+        Labels need three consecutive confident frames; unknown otherwise.
+
+config FALLINGDETECT_FALL_ENABLED
+    bool "Enable 24-frame physics-aware activity LSTM"
+    default y
+    help
+        Predicts motion, fall and person-still. Missing ranges do not prove vacancy.
+        Requires 10 Hz sampling. Sends A8/v2 results over BLE and UDP.
+        24 consecutive usable frames are required after a gap or startup.
+        Preserves alerts across observation loss and guards against mask-only motion.
+        Horizontal side view: increasing heatmap row points toward the ground.
+
+config FALLINGDETECT_RAW_FRAME_LOG
+    bool "Print all 64 raw distances to serial"
+    default n
+    help
+        Enable for sensor debugging or data collection. Normally only the
+        gesture result is printed for each frame.
+
+endmenu
